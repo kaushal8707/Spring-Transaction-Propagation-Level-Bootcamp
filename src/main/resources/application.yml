@@ -1,0 +1,24 @@
+spring:
+    application:
+        name: spring-transaction
+    datasource:
+        url: jdbc:oracle:thin:@(DESCRIPTION=(CONNECT_TIMEOUT=120)(TRANSPORT_CONNECT_TIMEOUT=3)(RETRY_COUNT=20)(RETRY_DELAY=3)(FAILOVER=ON)(ADDRESS_LIST=(LOAD_BALANCE=on)(ADDRESS=(PROTOCOL=TCP)(HOST=ech-10-157-159-119)(PORT=1527)))(CONNECT_DATA=(SID=dctf1s)))
+        username: MDES_USER_DEV
+        password: "MDES2025"
+    jpa:
+        generate-ddl: true
+        hibernate.ddl-auto: update
+        show-sql: true
+
+# Enable Transaction DEBUG logs
+
+logging:
+    level:
+        org:
+            hibernate:
+                transaction: DEBUG
+            springframework:
+                orm:
+                    jpa:
+                        JpaTransactionManager: DEBUG
+                transaction: DEBUG
