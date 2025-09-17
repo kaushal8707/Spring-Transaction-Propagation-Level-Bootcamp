@@ -1,6 +1,8 @@
 
 *** Transaction can only occurred with save / update or delete not with fetch  / select.
 
+** propagation - one transaction within another transaction
+
 Transaction Propagation
 =======================
 

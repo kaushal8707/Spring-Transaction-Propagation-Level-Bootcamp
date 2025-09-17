@@ -4,7 +4,6 @@ import com.spring.transaction.demo.spring_transaction.entity.Order;
 import com.spring.transaction.demo.spring_transaction.entity.Product;
 import com.spring.transaction.demo.spring_transaction.handler.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +28,7 @@ public class OrderProcessingService {
         this.productRecommendationHandler=productRecommendationHandler;
     }
 
-    /** REQUIRED:       Use an Existing Transaction or create a new one If NOT EXISTS */
+    /** REQUIRED:       Join an Existing Transaction or create a new one If NOT EXISTS */
     /** REQUIRES_NEW:   Always create a new Transaction, suspending if any existing transaction */
     /** MANDATORY:      When the propagation is MANDATORY, if there is an active transaction, then it will be used.
      *                  If there isn’t an active transaction, then Spring throws an exception: */
@@ -40,7 +39,7 @@ public class OrderProcessingService {
                         If there is any exception or error without impacting outer transaction */
 
 
-    //@Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRED)
     public Order placeAnOrder(Order order) {
 
         //get product inventory
@@ -61,11 +60,20 @@ public class OrderProcessingService {
             auditLogHandler.logAuditDetails(order, "order placement failed");
         }
 
+        /** MANDATORY - uncomment below code to test MANDATORY usecase*/
         //  paymentValidatorHandler.validatePayments(order);
-        //  notificationHandler.sendOrderConfirmationNotification(order);
-        //  productRecommendationHandler.getRecommendation();
 
-        getCustomerDetails();
+        /**NEVER- uncomment below code to see error Existing transaction found for transaction marked with propagation 'never'
+                 because the reason is we are running NEVER within a transaction*/
+        // notificationHandler.sendOrderConfirmationNotification(order);
+        /**NEVER - To resolve from call below method from OrderProcessingController*/
+        // return ResponseEntity.ok(orderProcessingService.processOrder(order));
+
+        /**NOT_SUPPORTED - Execute method without Transaction, suspending If found any transaction and If any transaction found it will suspend and execute . I will not support Transaction so don't come in my way.*/
+        // productRecommendationHandler.getRecommendation();
+
+        /**SUPPORTS - If there is any Active transaction, If not execute without transaction as well*/
+        // getCustomerDetails();
 
         return savedOrder;
     }
@@ -75,14 +83,13 @@ public class OrderProcessingService {
         System.out.println("Customer details fetched !!");
     }
 
-    /**call this method after placeAnOrder is successfully completed */
-    public void processOrder(Order order){
-
+    /**NEVER Example - call this method after placeAnOrder is successfully completed */
+    public Order processOrder(Order order){
         //Step 1: Place an Order & update Inventory
-        Order Order  = placeAnOrder(order);
-
+        Order order1  = placeAnOrder(order);
         //step2: send notification(non-transactional)
-        notificationHandler.sendOrderConfirmationNotification(order);
+        notificationHandler.sendOrderConfirmationNotification(order1);
+        return order1;
     }
 
     private void validateStockAvailability(Order order, Product product) {

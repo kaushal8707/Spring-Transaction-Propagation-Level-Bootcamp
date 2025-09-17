@@ -2,12 +2,10 @@ package com.spring.transaction.demo.spring_transaction.handler;
 
 import com.spring.transaction.demo.spring_transaction.entity.AuditLog;
 import com.spring.transaction.demo.spring_transaction.entity.Order;
-import com.spring.transaction.demo.spring_transaction.repository.AuditLogRepository;
-import com.spring.transaction.demo.spring_transaction.repository.OrderRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import com.spring.transaction.demo.spring_transaction.repository.AuditLogRepository;
 
 import java.time.LocalDateTime;
 

@@ -5,6 +5,24 @@ spring:
         url: jdbc:oracle:thin:@(DESCRIPTION=(CONNECT_TIMEOUT=120)(TRANSPORT_CONNECT_TIMEOUT=3)(RETRY_COUNT=20)(RETRY_DELAY=3)(FAILOVER=ON)(ADDRESS_LIST=(LOAD_BALANCE=on)(ADDRESS=(PROTOCOL=TCP)(HOST=ech-10-157-159-119)(PORT=1527)))(CONNECT_DATA=(SID=dctf1s)))
         username: MDES_USER_DEV
         password: "MDES2025"
+        driver-class-name: oracle.jdbc.driver.OracleDriver
+        oracleucp:
+            connection-pool-name: ${vcap.application.application_name}
+            initial-pool-size: 5
+            max-pool-size: 20
+            min-pool-size: 10
+            connection-wait-timeout: 5 #in sec
+            inactive-connection-timeout: 300 # in sec
+            abandoned-connection-timeout: 2 # in sec
+            time-to-live-connection-timeout: 1800 # in sec
+            query-timeout: 1 # in sec
+            max-connection-reuse-time: ${random.long[3601,7199]}
+            fast-connection-failover-enabled: true
+            validate-connection-on-borrow: false
+            connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+            max-statements: 5
+            connection-properties:
+                "[v$session.program]": ${spring.application.name}
     jpa:
         generate-ddl: true
         hibernate.ddl-auto: update

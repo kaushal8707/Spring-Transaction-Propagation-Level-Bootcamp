@@ -19,7 +19,6 @@ public class InventoryHandler {
     public Product updateProductDetails(Product product) {
 
         /** forcefully throwing an exception to simulate use of tx */
-        
         if(product.getPrice() > 5000) {
             throw new RuntimeException("DB Crashed");
         }

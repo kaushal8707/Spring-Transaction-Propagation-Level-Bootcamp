@@ -2,10 +2,10 @@ package com.spring.transaction.demo.spring_transaction.handler;
 
 import com.spring.transaction.demo.spring_transaction.entity.AuditLog;
 import com.spring.transaction.demo.spring_transaction.entity.Order;
-import com.spring.transaction.demo.spring_transaction.repository.AuditLogRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import com.spring.transaction.demo.spring_transaction.repository.AuditLogRepository;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +31,11 @@ public class PaymentValidatorHandler {
 
             //save the payment failure log
             auditLogRepository.save(paymentFailureLog);
+
+            if(order.getTotalPrice() > 5000) {
+                throw new RuntimeException("DB Crashed");
+            }
+
         }
     }
 }
